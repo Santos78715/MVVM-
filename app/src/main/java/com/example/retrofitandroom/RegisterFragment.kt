@@ -5,36 +5,43 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.activityViewModels
-import com.example.retrofitandroom.ui.ViewModels
-import dagger.hilt.EntryPoint
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModel
+import androidx.navigation.fragment.findNavController
+import com.cheezycode.notesample.models.UserRequest
+import com.example.retrofitandroom.databinding.FragmentRegisterBinding
+import com.example.retrofitandroom.ui.AuthViewmodel
+import dagger.hilt.android.AndroidEntryPoint
 
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-
-@EntryPoint
+@AndroidEntryPoint
 class RegisterFragment : Fragment() {
 
-    private val viewmodel by activityViewModels<ViewModels>()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
+    private var _binding: FragmentRegisterBinding? = null
+    private val binding get() = _binding!!
+     private  val authviewmodel by viewModels<AuthViewmodel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
+        _binding = FragmentRegisterBinding.inflate(inflater, container, false)
+        binding.register.setOnClickListener {
+            //findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
+            authviewmodel.registerUser(UserRequest("abc.com", "12345","101103"))
 
-        return inflater.inflate(R.layout.fragment_register, container, false)
+        }
+        binding.login.setOnClickListener {
+           // findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
+            authviewmodel.registerUser(UserRequest("abc.com", "12345","101103"))
+
+        }
+        return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
